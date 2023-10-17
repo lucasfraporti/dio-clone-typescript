@@ -1,8 +1,10 @@
+import { Link } from "react-router-dom";
+
 import logo from "../../assets/logo-dio.png";
 
 import Button from "../Button/Button";
 
-import { IHeader } from "./Types";
+import { useAuth } from "../../hooks/useAuth";
 
 import {
   BuscarInputContainer,
@@ -15,13 +17,17 @@ import {
   Wrapper,
 } from "./Styles";
 
-const Header = ({ autenticado }: IHeader) => {
+const Header = () => {
+  const { user, handleSignOut } = useAuth();
+
   return (
     <Wrapper>
       <Container>
         <Row>
-          <img src={logo} alt="Logo da DIO" />
-          {autenticado ? (
+          <Link to="/">
+            <img src={logo} alt="Logo da DIO" />
+          </Link>
+          {user.id ? (
             <>
               <BuscarInputContainer>
                 <Input placeholder="Buscar..." />
@@ -33,13 +39,16 @@ const Header = ({ autenticado }: IHeader) => {
         </Row>
 
         <Row>
-          {autenticado ? (
+          {user.id ? (
             <>
               <UserPicture src="https://avatars.githubusercontent.com/u/41999999?v=4" />
+              <a href="/" onClick={handleSignOut}>
+                Sair
+              </a>
             </>
           ) : (
             <>
-              <MenuRight href="#">Home</MenuRight>
+              <MenuRight href="/">Home</MenuRight>
               <Button title="Entrar" />
               <Button title="Cadastrar" />
             </>
